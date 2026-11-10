@@ -27,9 +27,9 @@ function orcamentoExemplo() {
     mesReferencia: mes,
     rendaMensal: 290_000,
     fontes: { auxilio: 220_000, bolsaIC: 70_000 },
-    percentuais: { moradia: 50, alimentacao: 30, estudos: 20 },
+    percentuais: { moradia: 50, alimentacao: 30, outros: 20 },
     despesas: [
-      { id: "e4", valor: 6_490, data: dia(9, "18:20"), categoriaId: "estudos" },
+      { id: "e4", valor: 6_490, data: dia(9, "18:20"), categoriaId: "outros", subcategoria: "Lazer" },
       { id: "e3", valor: 21_870, data: dia(8, "12:05"), categoriaId: "alimentacao" },
       { id: "e2", valor: 4_500, data: dia(6, "19:40"), categoriaId: "alimentacao" },
       { id: "e1", valor: 45_000, data: dia(5, "10:00"), categoriaId: "moradia" },

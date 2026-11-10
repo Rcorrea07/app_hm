@@ -84,6 +84,36 @@ test("planejar o mês e lançar gastos, com persistência local", async ({ page 
   await expect(page.getByText("R$ 1.069,50")).toBeVisible();
   await page.getByRole("button", { name: "Desfazer" }).click();
   await expect(page.getByText("R$ 769,50")).toBeVisible();
+
+  // Outros gastos: a subcategoria é obrigatória e todas descontam do mesmo teto.
+  await page.getByRole("link", { name: "Lançar gasto" }).click();
+  await digitar(page, "50");
+  await page.getByRole("button", { name: /^Outros$/ }).click();
+  await page.getByRole("button", { name: "Registrar gasto" }).dispatchEvent("click");
+  await expect(page.getByRole("alert").filter({ hasText: "Escolha em que você gastou" })).toBeVisible();
+  await page.getByRole("button", { name: "Lazer" }).click();
+  await page.getByRole("button", { name: "Registrar gasto" }).click();
+  await expect(page).toHaveURL(/\/app\/financeiro\/orcamento$/);
+  await expect(page.getByRole("list", { name: "Divisão de Outros gastos" })).toContainText("Lazer");
+
+  // Subcategoria nova criada na hora de lançar.
+  await page.getByRole("link", { name: "Lançar gasto" }).click();
+  await digitar(page, "30");
+  await page.getByRole("button", { name: /^Outros$/ }).click();
+  await page.getByRole("button", { name: "Nova" }).click();
+  await page.getByPlaceholder(/Academia/).fill("lazer");
+  await page.getByRole("button", { name: "Criar" }).click();
+  await expect(page.getByRole("dialog")).toContainText("já existe");
+  await page.getByPlaceholder(/Academia/).fill("academia");
+  await page.getByRole("button", { name: "Criar" }).click();
+  await expect(page.getByRole("button", { name: "Academia" })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("button", { name: "Registrar gasto" }).click();
+  await expect(page.getByText("R$ 689,50")).toBeVisible(); // 769,50 − 50 − 30
+
+  // Persistência da subcategoria criada.
+  await page.reload();
+  await expect(page.getByRole("list", { name: "Divisão de Outros gastos" })).toContainText("Academia");
+  await expect(page.getByText("Outros · Academia")).toBeVisible();
 });
 
 test("larguras de tela sem rolagem horizontal", async ({ page }) => {

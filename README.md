@@ -11,9 +11,9 @@ As telas 5–10 (eixo Suporte Financeiro) funcionam de verdade:
 | 5 Resumo | Mensalidade líquida já com o desconto da bolsa | 1.2 |
 | 6 Detalhes da Bolsa | Cotas reembolsável / não reembolsável e prazo de renovação na SAE | 1.2 |
 | 7 Informar Renda | Renda por fonte e saldo livre calculado na hora | 2.1 |
-| 8 Definir Tetos | Moradia, Alimentação e Estudos somando 100% (sugestão 50/30/20) | 2.2 |
-| 9 Painel do Orçamento | Saldo restante, barras por categoria, histórico com desfazer | 3.2 |
-| 10 Lançar Gasto | Teclado numérico + categoria em 1 toque, aviso antes de estourar o teto | 3.1 |
+| 8 Definir Tetos | Moradia, Alimentação e Outros gastos somando 100% (sugestão 50/30/20) | 2.2 |
+| 9 Painel do Orçamento | Saldo restante, barras por categoria, divisão de Outros gastos por subcategoria, histórico com desfazer | 3.2 |
+| 10 Lançar Gasto | Teclado numérico, categoria em 1 toque, subcategoria em Outros (Lazer, Investimento, Viagem… ou uma nova), aviso antes de estourar o teto | 3.1 |
 
 Não há backend. Os gastos ficam só no `localStorage` do aparelho, como pede o User Story.
 O layout se adapta: no celular aparecem as abas inferiores, e no computador aparecem uma barra superior, um menu lateral e o roteiro da tarefa.
