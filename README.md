@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# App Inatel · Planejador Financeiro & Bolsa
 
-## Getting Started
+Protótipo do **App Inatel Acadêmico** com uma funcionalidade nova, o **Planejador Financeiro & Bolsa**.
+É o projeto final de S05 — Interação Homem-Máquina (Inatel). Aluno: Rafael Correa Barbosa (GES 745).
 
-First, run the development server:
+As telas 1–4 (Perfis, Login, Avisos, Menu) imitam o app real e servem só de contexto.
+As telas 5–10 (eixo Suporte Financeiro) funcionam de verdade:
+
+| Tela | O que faz | HTA |
+|---|---|---|
+| 5 Resumo | Mensalidade líquida já com o desconto da bolsa | 1.2 |
+| 6 Detalhes da Bolsa | Cotas reembolsável / não reembolsável e prazo de renovação na SAE | 1.2 |
+| 7 Informar Renda | Renda por fonte e saldo livre calculado na hora | 2.1 |
+| 8 Definir Tetos | Moradia, Alimentação e Estudos somando 100% (sugestão 50/30/20) | 2.2 |
+| 9 Painel do Orçamento | Saldo restante, barras por categoria, histórico com desfazer | 3.2 |
+| 10 Lançar Gasto | Teclado numérico + categoria em 1 toque, aviso antes de estourar o teto | 3.1 |
+
+Não há backend. Os gastos ficam só no `localStorage` do aparelho, como pede o User Story.
+O layout se adapta: no celular aparecem as abas inferiores, e no computador aparecem uma barra superior, um menu lateral e o roteiro da tarefa.
+
+## Rodar
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm test           # regras de negócio (Vitest)
+npm run e2e        # fluxo completo no navegador (Playwright)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Estrutura
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/domain/`: as 7 classes do diagrama de classes, em TypeScript puro e testadas. Valores em centavos.
+- `src/store/`: estado das telas e persistência local.
+- `src/screens/`: telas existentes (mock) e telas do Suporte Financeiro.
+- `src/components/`: casca responsiva e componentes no visual do app.
+- `src/tour/`: roteiro da tarefa, que marca os passos da HTA conforme o uso.
