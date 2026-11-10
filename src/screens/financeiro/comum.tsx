@@ -1,14 +1,32 @@
 "use client";
 
-import { House, Utensils, BookOpen, LoaderCircle, type LucideIcon } from "lucide-react";
+import { House, Utensils, Shapes, BookOpen, PartyPopper, TrendingUp, Bus, Tag, LoaderCircle, type LucideIcon } from "lucide-react";
 import type { CategoriaId } from "@/domain/CategoriaGasto";
 import { Esqueleto } from "@/components/ui/basicos";
 
 export const ICONE_CATEGORIA: Record<CategoriaId, LucideIcon> = {
   moradia: House,
   alimentacao: Utensils,
-  estudos: BookOpen,
+  outros: Shapes,
 };
+
+/** Ícones das subcategorias sugeridas de "Outros gastos"; as criadas pelo aluno usam Tag. */
+const ICONE_SUBCATEGORIA: Record<string, LucideIcon> = {
+  "Estudos / Material": BookOpen,
+  Lazer: PartyPopper,
+  Investimento: TrendingUp,
+  "Viagem / Transporte": Bus,
+};
+
+export function IconeSubcategoria({ nome, className = "size-4" }: { nome: string; className?: string }) {
+  const Icone = ICONE_SUBCATEGORIA[nome] ?? Tag;
+  return <Icone className={className} aria-hidden />;
+}
+
+/** "Alimentação" ou "Outros · Lazer". */
+export function rotuloGasto(categoriaCurta: string, subcategoria?: string): string {
+  return subcategoria ? `${categoriaCurta} · ${subcategoria}` : categoriaCurta;
+}
 
 export function IconeCategoria({ id, className = "size-5" }: { id: CategoriaId; className?: string }) {
   const Icone = ICONE_CATEGORIA[id];

@@ -9,10 +9,12 @@ import { BarraProgresso, EtiquetaEstado, Segmentado, ValorAnimado } from "@/comp
 import { Folha } from "@/components/ui/Folha";
 import { useToast } from "@/components/ui/Toast";
 import { useFinanceiro } from "@/store/Financeiro";
-import { nomeCategoria } from "@/domain/CategoriaGasto";
+import { CATEGORIAS, nomeCategoria } from "@/domain/CategoriaGasto";
 import { formatBRL, formatBRLCurto, porcento } from "@/domain/money";
 import { formatarDataHora, formatarMes } from "@/domain/datas";
-import { IconeCategoria, Sincronizando } from "./comum";
+import { IconeCategoria, IconeSubcategoria, Sincronizando, rotuloGasto } from "./comum";
+
+const curtoDe = (id: string) => CATEGORIAS.find((c) => c.id === id)?.curto ?? id;
 
 /** Tela 9 · Painel do Orçamento (HTA 3.2). */
 export function PainelOrcamento() {
@@ -42,7 +44,7 @@ export function PainelOrcamento() {
           </span>
           <h2 className="mt-5 text-[20px] font-bold">Seu mês ainda não tem orçamento</h2>
           <p className="mt-2 text-[15px] text-rotulo-2">
-            Informe sua renda e o app divide o que sobra depois da mensalidade entre moradia, alimentação e estudos.
+            Informe sua renda e o app divide o que sobra depois da mensalidade entre moradia, alimentação e outros gastos (lazer, investimento, viagem…).
           </p>
           <BotaoLink href="/app/financeiro/planejar/renda" className="mt-6">
             Planejar orçamento do mês
@@ -90,6 +92,25 @@ export function PainelOrcamento() {
                   <span>{porcento(c.calcularComprometimento())} do teto usado</span>
                   <EtiquetaEstado estado={c.estado} />
                 </p>
+                {c.totalPorSubcategoria().length > 0 && (
+                  <ul className="mt-2.5 space-y-1.5 rounded-lg bg-superficie px-3 py-2.5" aria-label={`Divisão de ${c.nome}`}>
+                    {c.totalPorSubcategoria().map((s) => (
+                      <li key={s.nome} className="text-[13px]">
+                        <span className="flex items-center gap-2">
+                          <IconeSubcategoria nome={s.nome} className="size-3.5 text-rotulo-2" />
+                          <span className="flex-1 truncate">{s.nome}</span>
+                          <span className="tabular-nums">{formatBRLCurto(s.total)}</span>
+                        </span>
+                        <span className="mt-1 block h-1 overflow-hidden rounded-full bg-sobre/10" aria-hidden>
+                          <span
+                            className="block h-full rounded-full bg-ativo transition-[width] duration-700"
+                            style={{ width: `${(s.total / c.totalGasto) * 100}%` }}
+                          />
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
@@ -111,14 +132,14 @@ export function PainelOrcamento() {
                 <li key={d.id} className="flex animate-sobe items-center gap-3 border-b border-separador/70 py-1 pl-4 pr-1 last:border-b-0">
                   <IconeCategoria id={d.categoriaId} className="size-4.5 text-rotulo-2" />
                   <span className="flex-1">
-                    <span className="block text-[15px]">{nomeCategoria(d.categoriaId)}</span>
+                    <span className="block text-[15px]">{rotuloGasto(curtoDe(d.categoriaId), d.subcategoria)}</span>
                     <span className="block text-[12px] text-rotulo-2">{formatarDataHora(d.data)}</span>
                   </span>
                   <span className="text-[15px] font-semibold tabular-nums">{formatBRL(d.valor)}</span>
                   <button
                     type="button"
                     onClick={() => remover(d.id)}
-                    aria-label={`Remover gasto de ${formatBRL(d.valor)} em ${nomeCategoria(d.categoriaId)}`}
+                    aria-label={`Remover gasto de ${formatBRL(d.valor)} em ${d.subcategoria ?? nomeCategoria(d.categoriaId)}`}
                     className="flex size-11 items-center justify-center rounded-full text-rotulo-2 active:bg-sobre/10 active:text-estouro"
                   >
                     <Trash2 className="size-4.5" aria-hidden />

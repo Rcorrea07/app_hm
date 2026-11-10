@@ -10,7 +10,7 @@ export const PASSOS = [
   { id: "1.2", titulo: "Ver a mensalidade líquida", dica: "Confira a parcela já com o desconto da bolsa. Toque na bolsa para ver as cotas." },
   { id: "2.1", titulo: "Informar a renda do mês", dica: "Toque em Planejar orçamento do mês, informe a renda e toque em Continuar." },
   { id: "2.2", titulo: "Definir os tetos", dica: "Use a divisão sugerida ou ajuste os controles e toque em Salvar orçamento." },
-  { id: "3.1", titulo: "Lançar um gasto", dica: "Toque em + Lançar gasto, digite o valor, escolha a categoria e registre." },
+  { id: "3.1", titulo: "Lançar um gasto", dica: "Toque em + Lançar gasto, digite o valor, escolha a categoria (em Outros, diga em quê) e registre." },
   { id: "3.2", titulo: "Consultar o saldo", dica: "Veja a barra da categoria e o saldo restante atualizados no painel." },
 ] as const;
 

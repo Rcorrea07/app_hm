@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { Mensalidade, type MensalidadeDados } from "@/domain/Mensalidade";
-import { OrcamentoMensal, type FonteRenda, type OrcamentoDados } from "@/domain/OrcamentoMensal";
+import { OrcamentoMensal, migrarDados, type FonteRenda, type OrcamentoDados } from "@/domain/OrcamentoMensal";
 import { SuporteFinanceiro } from "@/domain/SuporteFinanceiro";
 import { armazenamentoLocal } from "@/domain/armazenamentoLocal";
 import { CATEGORIAS, type CategoriaId } from "@/domain/CategoriaGasto";
@@ -52,7 +52,9 @@ interface FinanceiroApi {
   ajustarPercentual: (indice: number, valor: number) => void;
   usarDivisaoSugerida: () => void;
   salvarOrcamento: () => void;
-  registrarDespesa: (categoria: CategoriaId, valor: Centavos) => DespesaDados | null;
+  registrarDespesa: (categoria: CategoriaId, valor: Centavos, subcategoria?: string) => DespesaDados | null;
+  /** Cria uma subcategoria em Outros gastos. Devolve o nome criado ou a mensagem de erro. */
+  criarSubcategoria: (nome: string) => { ok: true; nome: string } | { ok: false; erro: string };
   removerDespesa: (id: string) => DespesaDados | null;
   restaurarDespesa: (d: DespesaDados) => void;
   preencherExemplo: () => void;
@@ -89,7 +91,9 @@ export function FinanceiroProvider({ children }: { children: ReactNode }) {
 
   // Lê o que já estava salvo neste celular (só no navegador, depois de montar).
   useEffect(() => {
-    const salvo = armazenamentoLocal.lerOrcamento();
+    const lido = armazenamentoLocal.lerOrcamento();
+    // Dados da versão anterior (categoria "estudos") viram "Outros gastos".
+    const salvo = lido ? migrarDados(lido) : null;
     // Hidratação: o localStorage só existe no navegador, então a leitura fica no efeito.
     /* eslint-disable react-hooks/set-state-in-effect */
     if (salvo) {
@@ -177,19 +181,35 @@ export function FinanceiroProvider({ children }: { children: ReactNode }) {
     o.definirTetos(rascunho.percentuais);
     // Replanejar o mês mantém os gastos já lançados.
     const despesas = orcamentoDados?.despesas ?? [];
-    setOrcamentoDados({ ...o.toDados(), despesas });
+    setOrcamentoDados({ ...o.toDados(), despesas, subcategorias: orcamentoDados?.subcategorias ?? [] });
     setVersao((v) => v + 1);
   }, [mensalidade, rendaRascunho, rascunho, orcamentoDados]);
 
   const registrarDespesa = useCallback(
-    (categoria: CategoriaId, valor: Centavos) => {
+    (categoria: CategoriaId, valor: Centavos, subcategoria?: string) => {
       if (!mensalidade || !orcamentoDados) return null;
       const o = OrcamentoMensal.fromDados(orcamentoDados, mensalidade);
-      const despesa = o.categoria(categoria).registrarDespesa(valor);
+      const despesa = o.categoria(categoria).registrarDespesa(valor, undefined, subcategoria);
       setOrcamentoDados(o.toDados());
       despesa.salvarLocal();
       setVersao((v) => v + 1);
       return despesa.toDados();
+    },
+    [mensalidade, orcamentoDados],
+  );
+
+  const criarSubcategoria = useCallback<FinanceiroApi["criarSubcategoria"]>(
+    (nome) => {
+      if (!mensalidade || !orcamentoDados) return { ok: false, erro: "Planeje o orçamento antes." };
+      const o = OrcamentoMensal.fromDados(orcamentoDados, mensalidade);
+      try {
+        const criada = o.categoria("outros").adicionarSubcategoria(nome);
+        setOrcamentoDados(o.toDados());
+        setVersao((v) => v + 1);
+        return { ok: true, nome: criada };
+      } catch (e) {
+        return { ok: false, erro: e instanceof Error ? e.message : "Não foi possível criar." };
+      }
     },
     [mensalidade, orcamentoDados],
   );
@@ -243,6 +263,7 @@ export function FinanceiroProvider({ children }: { children: ReactNode }) {
     usarDivisaoSugerida,
     salvarOrcamento,
     registrarDespesa,
+    criarSubcategoria,
     removerDespesa,
     restaurarDespesa,
     preencherExemplo,

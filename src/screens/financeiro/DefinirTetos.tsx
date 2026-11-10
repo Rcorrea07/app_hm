@@ -77,8 +77,11 @@ export function DefinirTetos() {
                   <span className="flex size-8 items-center justify-center rounded-lg" style={{ backgroundColor: `${CORES[i]}33`, color: CORES[i] }}>
                     <IconeCategoria id={c.id} className="size-4.5" />
                   </span>
-                  <label htmlFor={`teto-${c.id}`} className="flex-1 text-[16px] font-semibold">
+                  <label htmlFor={`teto-${c.id}`} className="min-w-0 flex-1 text-[16px] font-semibold">
                     {CATEGORIAS[i].nome}
+                    {c.id === "outros" && (
+                      <span className="block truncate text-[12px] font-normal text-rotulo-2">Investimento, lazer, viagem, estudos…</span>
+                    )}
                   </label>
                   <span className="text-[15px] tabular-nums">
                     <strong>{c.percentualTeto}%</strong> <span className="text-rotulo-2">· {formatBRL(c.valorTeto)}</span>

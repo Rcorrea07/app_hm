@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
-import { TriangleAlert } from "lucide-react";
+import { TriangleAlert, Plus } from "lucide-react";
 import { Tela } from "@/components/ui/Tela";
 import { Botao, BotaoLink, NotaPrivacidade } from "@/components/ui/basicos";
 import { TecladoNumerico } from "@/components/ui/entradas";
@@ -10,10 +10,10 @@ import { Folha } from "@/components/ui/Folha";
 import { useToast, vibrar } from "@/components/ui/Toast";
 import { useFinanceiro } from "@/store/Financeiro";
 import { useRoteiro } from "@/tour/Roteiro";
-import { CATEGORIAS, type CategoriaId } from "@/domain/CategoriaGasto";
+import { CATEGORIAS, LIMITE_NOME_SUBCATEGORIA, temSubcategorias, type CategoriaId } from "@/domain/CategoriaGasto";
 import { aplicarTecla, textoParaCentavos, type TeclaValor } from "@/domain/teclado";
 import { formatBRL } from "@/domain/money";
-import { IconeCategoria, Sincronizando } from "./comum";
+import { IconeCategoria, IconeSubcategoria, Sincronizando, rotuloGasto } from "./comum";
 
 /** Tela 10 · Lançar Gasto (HTA 3.1). */
 export function LancarGasto() {
@@ -23,25 +23,49 @@ export function LancarGasto() {
   const { marcar } = useRoteiro();
   const [texto, setTexto] = useState("");
   const [categoria, setCategoria] = useState<CategoriaId | null>(null);
+  const [subcategoria, setSubcategoria] = useState<string | null>(null);
   const [confirmar, setConfirmar] = useState(false);
   const [tremer, setTremer] = useState(0);
+  const [criando, setCriando] = useState(false);
+  const [nomeNova, setNomeNova] = useState("");
+  const [erroNova, setErroNova] = useState("");
 
   const valor = textoParaCentavos(texto);
   const { orcamento } = fin;
   const cat = orcamento && categoria ? orcamento.categoria(categoria) : null;
   const excesso = cat ? cat.excessoSeRegistrar(valor) : 0;
-  const pronto = valor > 0 && categoria !== null;
+  const precisaSub = categoria !== null && temSubcategorias(categoria);
+  const pronto = valor > 0 && categoria !== null && (!precisaSub || subcategoria !== null);
+  const curto = CATEGORIAS.find((c) => c.id === categoria)?.curto ?? "";
+
+  function escolherCategoria(id: CategoriaId) {
+    setCategoria(id);
+    if (!temSubcategorias(id)) setSubcategoria(null);
+  }
+
+  function criarSubcategoria() {
+    const r = fin.criarSubcategoria(nomeNova);
+    if (!r.ok) {
+      setErroNova(r.erro);
+      return;
+    }
+    setSubcategoria(r.nome);
+    setCriando(false);
+    setNomeNova("");
+    setErroNova("");
+    vibrar(15);
+  }
 
   const onTecla = useCallback((t: TeclaValor) => setTexto((x) => aplicarTecla(x, t)), []);
 
   function registrar() {
     if (!categoria) return;
-    const d = fin.registrarDespesa(categoria, valor);
+    const d = fin.registrarDespesa(categoria, valor, subcategoria ?? undefined);
     if (!d) return;
     marcar("3.1");
     vibrar(25);
     toast.mostrar({
-      texto: `${formatBRL(valor)} em ${CATEGORIAS.find((c) => c.id === categoria)?.curto} registrado.`,
+      texto: `${formatBRL(valor)} em ${rotuloGasto(curto, d.subcategoria)} registrado.`,
       acao: { rotulo: "Desfazer", executar: () => fin.removerDespesa(d.id) },
     });
     router.push("/app/financeiro/orcamento");
@@ -92,7 +116,7 @@ export function LancarGasto() {
                 key={c.id}
                 type="button"
                 aria-pressed={categoria === c.id}
-                onClick={() => setCategoria(c.id)}
+                onClick={() => escolherCategoria(c.id)}
                 className={`toque flex h-16 flex-col items-center justify-center gap-1 rounded-xl border text-[14px] font-medium transition-colors ${
                   categoria === c.id ? "border-inatel bg-inatel text-white" : "border-borda active:bg-sobre/10"
                 }`}
@@ -102,6 +126,39 @@ export function LancarGasto() {
               </button>
             ))}
           </div>
+
+          {precisaSub && cat && (
+            <div className="mt-3 animate-sobe">
+              <p className="text-[13px] text-rotulo-2">Em quê?</p>
+              <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label="Subcategoria de Outros gastos">
+                {cat.subcategorias.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    aria-pressed={subcategoria === s}
+                    onClick={() => setSubcategoria(s)}
+                    className={`toque flex h-9 items-center gap-1.5 rounded-full border px-3 text-[14px] font-medium transition-colors ${
+                      subcategoria === s ? "border-inatel bg-inatel text-white" : "border-borda active:bg-sobre/10"
+                    }`}
+                  >
+                    <IconeSubcategoria nome={s} />
+                    {s}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setErroNova("");
+                    setCriando(true);
+                  }}
+                  className="toque flex h-9 items-center gap-1 rounded-full border border-dashed border-ativo px-3 text-[14px] font-medium text-ativo active:bg-ativo/10"
+                >
+                  <Plus className="size-4" aria-hidden /> Nova
+                </button>
+              </div>
+            </div>
+          )}
+
           <p className="mt-2 min-h-5 text-center text-[13px]" aria-live="polite">
             {cat ? (
               excesso > 0 ? (
@@ -126,13 +183,47 @@ export function LancarGasto() {
             </Botao>
             {!pronto && tremer > 0 && (
               <p className="pt-2 text-center text-[13px] text-atencao" role="alert">
-                {valor === 0 ? "Digite um valor maior que zero." : "Escolha uma categoria."}
+                {valor === 0 ? "Digite um valor maior que zero." : categoria === null ? "Escolha uma categoria." : "Escolha em que você gastou."}
               </p>
             )}
           </div>
           <NotaPrivacidade />
         </div>
       )}
+
+      <Folha aberta={criando} onFechar={() => setCriando(false)} titulo="Nova subcategoria">
+        <form
+          noValidate
+          onSubmit={(e) => {
+            e.preventDefault();
+            criarSubcategoria();
+          }}
+          className="space-y-3 pb-1"
+        >
+          <p className="text-center text-[14px] text-rotulo-2">Ela entra em Outros gastos e usa o mesmo teto.</p>
+          <label className="block">
+            <span className="sr-only">Nome da subcategoria</span>
+            <input
+              autoFocus
+              value={nomeNova}
+              maxLength={LIMITE_NOME_SUBCATEGORIA}
+              onChange={(e) => {
+                setNomeNova(e.target.value);
+                setErroNova("");
+              }}
+              placeholder="Ex.: Academia, Presentes, Saúde"
+              className="h-12 w-full rounded-lg border border-borda bg-transparent px-4 text-[17px] text-rotulo placeholder:text-rotulo-3 focus:border-ativo focus:outline-none"
+            />
+          </label>
+          <p role="alert" className="min-h-5 text-center text-[13px] text-estouro">
+            {erroNova}
+          </p>
+          <Botao type="submit">Criar</Botao>
+          <Botao variante="secundario" onClick={() => setCriando(false)}>
+            Cancelar
+          </Botao>
+        </form>
+      </Folha>
 
       <Folha aberta={confirmar} onFechar={() => setConfirmar(false)} titulo="Vai passar do teto">
         <div className="flex flex-col items-center pb-4 text-center">

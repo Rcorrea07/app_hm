@@ -72,7 +72,7 @@ const TELAS: Array<[string, InfoTela]> = [
       nome: "Lançar Gasto",
       tipo: "nova",
       hta: "3.1 Registrar despesa rápida em categoria pré-definida",
-      classes: ["CategoriaGasto.registrarDespesa()", "Despesa.salvarLocal()"],
+      classes: ["CategoriaGasto.registrarDespesa()", "CategoriaGasto.adicionarSubcategoria()", "Despesa.salvarLocal()"],
     },
   ],
   [
