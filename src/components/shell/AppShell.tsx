@@ -44,7 +44,7 @@ function BotaoRoteiro({ onClick, className }: { onClick: () => void; className: 
 /* ---------- Barra superior do computador ---------- */
 function BarraSuperior({ onRoteiro }: { onRoteiro: () => void }) {
   return (
-    <header className="hidden h-14 shrink-0 items-center gap-4 bg-inatel px-5 desk:flex">
+    <header className="hidden h-14 shrink-0 items-center gap-4 bg-inatel px-5 text-white desk:flex">
       <Link href="/app/avisos" className="flex items-baseline gap-2">
         <span className="text-[24px] font-black italic tracking-tight">Inatel</span>
         <span className="text-[15px] text-white/85">Acadêmico</span>
@@ -77,7 +77,7 @@ function MenuLateral() {
       href={href}
       aria-current={ativo ? "page" : undefined}
       className={`flex h-11 items-center gap-3 rounded-lg px-3 text-[15px] transition-colors ${
-        ativo ? "bg-inatel/25 font-semibold text-white" : "text-white/75 hover:bg-white/8 hover:text-white"
+        ativo ? "bg-inatel/15 font-semibold text-rotulo" : "text-rotulo/75 hover:bg-sobre/8 hover:text-rotulo"
       }`}
     >
       <Icone className={`size-5 ${ativo ? "text-ativo" : ""}`} aria-hidden />
@@ -91,7 +91,7 @@ function MenuLateral() {
       : pathname.startsWith(href) || pathname.startsWith("/app/financeiro/planejar") || pathname === "/app/financeiro/lancar";
 
   return (
-    <nav aria-label="Navegação principal" className="hidden w-60 shrink-0 flex-col gap-1 border-r border-white/10 bg-[#0e0e10] p-3 desk:flex">
+    <nav aria-label="Navegação principal" className="hidden w-60 shrink-0 flex-col gap-1 border-r border-sobre/10 bg-painel p-3 desk:flex">
       {ABAS.map((n) =>
         n.disponivel ? (
           item(n.href, n.rotulo, n.Icone, !naFin && pathname.startsWith(n.href))
@@ -100,7 +100,7 @@ function MenuLateral() {
             key={n.href}
             type="button"
             onClick={() => toast.mostrar({ tom: "info", texto: AVISO_INDISPONIVEL })}
-            className="flex h-11 items-center gap-3 rounded-lg px-3 text-left text-[15px] text-white/45 hover:bg-white/5"
+            className="flex h-11 items-center gap-3 rounded-lg px-3 text-left text-[15px] text-rotulo/45 hover:bg-sobre/5"
           >
             <n.Icone className="size-5" aria-hidden />
             {n.rotulo}
@@ -113,7 +113,7 @@ function MenuLateral() {
       {NAV_FIN.map((n) => item(n.href, n.rotulo, n.Icone, finAtivo(n.href, n.exato)))}
       <Link
         href="/app/perfis"
-        className="mt-auto flex h-11 items-center gap-3 rounded-lg px-3 text-[15px] text-white/60 hover:bg-white/8 hover:text-white"
+        className="mt-auto flex h-11 items-center gap-3 rounded-lg px-3 text-[15px] text-rotulo/60 hover:bg-sobre/8 hover:text-rotulo"
       >
         <LogOut className="size-5" aria-hidden /> Sair
       </Link>
@@ -146,7 +146,7 @@ function App({ children }: { children: ReactNode }) {
           </div>
           <aside
             aria-label="Roteiro da tarefa"
-            className="rolagem hidden w-[340px] shrink-0 space-y-4 overflow-y-auto border-l border-white/10 bg-[#0b0b0d] p-4 largo:block"
+            className="rolagem hidden w-[340px] shrink-0 space-y-4 overflow-y-auto border-l border-sobre/10 bg-painel p-4 largo:block"
           >
             <PainelRoteiro />
             <InfoTelaAtual />

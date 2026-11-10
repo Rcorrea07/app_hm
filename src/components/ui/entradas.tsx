@@ -34,7 +34,7 @@ export function CampoDinheiro({
           const el = e.currentTarget;
           requestAnimationFrame(() => el.setSelectionRange(el.value.length, el.value.length));
         }}
-        className="h-14 w-full rounded-lg border border-borda bg-transparent px-4 text-[22px] font-semibold tabular-nums text-white transition-colors focus:border-ativo focus:outline-none"
+        className="h-14 w-full rounded-lg border border-borda bg-transparent px-4 text-[22px] font-semibold tabular-nums text-rotulo transition-colors focus:border-ativo focus:outline-none"
       />
     </label>
   );
@@ -67,7 +67,7 @@ export function TecladoNumerico({ onTecla }: { onTecla: (t: TeclaValor) => void 
             onTecla(t);
           }}
           aria-label={t === "apagar" ? "Apagar" : t === "," ? "Vírgula" : t}
-          className="toque flex h-[52px] items-center justify-center rounded-xl bg-superficie-2 text-[24px] font-medium transition-colors active:bg-[#48484a]"
+          className="toque flex h-[52px] items-center justify-center rounded-xl bg-superficie-2 text-[24px] font-medium transition-colors active:bg-tecla-ativa"
         >
           {t === "apagar" ? <Delete className="size-6" aria-hidden /> : t}
         </button>

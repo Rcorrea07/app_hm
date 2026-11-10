@@ -65,23 +65,23 @@ export function InformarRenda() {
           <table className="mt-5 w-full border-collapse text-center text-[15px] desk:mx-4 desk:w-[calc(100%-2rem)]" aria-live="polite">
             <caption className="sr-only">Cálculo do saldo livre</caption>
             <thead>
-              <tr className="bg-inatel">
-                <th scope="col" className="h-10 border border-white/70 font-normal">Cálculo</th>
-                <th scope="col" className="h-10 border border-white/70 font-normal">Valor</th>
+              <tr className="bg-inatel text-white">
+                <th scope="col" className="h-10 border border-grade font-normal">Cálculo</th>
+                <th scope="col" className="h-10 border border-grade font-normal">Valor</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <th scope="row" className="h-11 border border-white/70 font-normal">Renda mensal</th>
-                <td className="h-11 border border-white/70 tabular-nums">{formatBRL(fin.rendaRascunho)}</td>
+                <th scope="row" className="h-11 border border-grade font-normal">Renda mensal</th>
+                <td className="h-11 border border-grade tabular-nums">{formatBRL(fin.rendaRascunho)}</td>
               </tr>
               <tr>
-                <th scope="row" className="h-11 border border-white/70 font-normal">(−) Parcela líquida</th>
-                <td className="h-11 border border-white/70 tabular-nums">{formatBRL(mensalidade.parcelaLiquida)}</td>
+                <th scope="row" className="h-11 border border-grade font-normal">(−) Parcela líquida</th>
+                <td className="h-11 border border-grade tabular-nums">{formatBRL(mensalidade.parcelaLiquida)}</td>
               </tr>
-              <tr className="bg-white/[0.06]">
-                <th scope="row" className="h-12 border border-white/70 font-semibold">Saldo livre</th>
-                <td className={`h-12 border border-white/70 text-[17px] font-bold ${saldo > 0 ? "text-ok" : saldo < 0 ? "text-estouro" : ""}`}>
+              <tr className="bg-sobre/[0.06]">
+                <th scope="row" className="h-12 border border-grade font-semibold">Saldo livre</th>
+                <td className={`h-12 border border-grade text-[17px] font-bold ${saldo > 0 ? "text-ok" : saldo < 0 ? "text-estouro" : ""}`}>
                   <ValorAnimado valor={saldo} />
                 </td>
               </tr>

@@ -20,9 +20,9 @@ export function Tabela({
     <table className="w-full border-collapse text-center text-[15px]">
       {legenda && <caption className="sr-only">{legenda}</caption>}
       <thead>
-        <tr className="bg-inatel">
+        <tr className="bg-inatel text-white">
           {colunas.map((c) => (
-            <th key={c} scope="col" className="h-10 border border-white/70 px-2 font-normal">
+            <th key={c} scope="col" className="h-10 border border-grade px-2 font-normal">
               {c}
             </th>
           ))}
@@ -30,11 +30,11 @@ export function Tabela({
       </thead>
       <tbody>
         {linhas.map((l) => (
-          <tr key={l.chave} className={l.forte ? "bg-white/[0.06] font-semibold" : ""}>
-            <th scope="row" className={`h-11 border border-white/70 px-2 ${l.forte ? "font-semibold" : "font-normal"}`}>
+          <tr key={l.chave} className={l.forte ? "bg-sobre/[0.06] font-semibold" : ""}>
+            <th scope="row" className={`h-11 border border-grade px-2 ${l.forte ? "font-semibold" : "font-normal"}`}>
               {l.celulas[0]}
             </th>
-            <td className={`h-11 border border-white/70 px-2 tabular-nums ${l.tom ?? ""}`}>{l.celulas[1]}</td>
+            <td className={`h-11 border border-grade px-2 tabular-nums ${l.tom ?? ""}`}>{l.celulas[1]}</td>
           </tr>
         ))}
       </tbody>
@@ -53,7 +53,7 @@ export function Segmentado({ ativo }: { ativo: "resumo" | "orcamento" }) {
       <div className="relative grid grid-cols-2 rounded-[9px] bg-superficie-2 p-0.5">
         <span
           aria-hidden
-          className="absolute inset-y-0.5 left-0.5 w-[calc(50%-2px)] rounded-[7px] bg-[#636366] shadow transition-transform duration-300"
+          className="absolute inset-y-0.5 left-0.5 w-[calc(50%-2px)] rounded-[7px] bg-segmento shadow transition-transform duration-300"
           style={{ transform: ativo === "orcamento" ? "translateX(100%)" : "none" }}
         />
         {itens.map((i) => (
@@ -124,7 +124,7 @@ export function BarraProgresso({
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(proporcao * 100)}
-      className={`w-full overflow-hidden rounded-full bg-white/12 ${altura}`}
+      className={`w-full overflow-hidden rounded-full bg-sobre/12 ${altura}`}
     >
       <div
         className="h-full rounded-full transition-[width] duration-700 ease-out"
@@ -160,7 +160,7 @@ export function Passos({ atual, total, rotulo }: { atual: number; total: number;
         {Array.from({ length: total }, (_, i) => (
           <span
             key={i}
-            className={`h-1 flex-1 rounded-full transition-colors duration-500 ${i < atual ? "bg-ativo" : "bg-white/15"}`}
+            className={`h-1 flex-1 rounded-full transition-colors duration-500 ${i < atual ? "bg-ativo" : "bg-sobre/15"}`}
           />
         ))}
       </div>

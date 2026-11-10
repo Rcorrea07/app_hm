@@ -66,7 +66,7 @@ export function Resumo() {
               <div key={b.tipo}>
                 <Link
                   href="/app/financeiro/bolsa"
-                  className="toque flex min-h-14 items-center gap-3 border-y border-separador/70 px-4 py-2.5 active:bg-white/10"
+                  className="toque flex min-h-14 items-center gap-3 border-y border-separador/70 px-4 py-2.5 active:bg-sobre/10"
                 >
                   <span className="flex-1">
                     <span className="block text-[17px]">

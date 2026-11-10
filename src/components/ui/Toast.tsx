@@ -63,7 +63,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           <div
             key={atual.id}
             role="status"
-            className="pointer-events-auto flex w-full max-w-sm animate-desce items-center gap-3 rounded-2xl bg-[#2c2c2e]/95 px-4 py-3 shadow-2xl ring-1 ring-white/10 backdrop-blur"
+            className="pointer-events-auto flex w-full max-w-sm animate-desce items-center gap-3 rounded-2xl bg-toast/95 px-4 py-3 shadow-2xl ring-1 ring-sobre/10 backdrop-blur"
           >
             <Icone className={`size-5 shrink-0 ${CORES[atual.tom]}`} aria-hidden />
             <span className="flex-1 text-[15px] leading-snug">{atual.texto}</span>

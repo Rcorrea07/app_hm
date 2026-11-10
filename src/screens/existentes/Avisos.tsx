@@ -37,7 +37,7 @@ export function Avisos() {
             return (
               <li key={a.id} className="border-b border-separador/60">
                 {a.href ? (
-                  <Link href={a.href} className="block px-4 py-3 active:bg-white/10">
+                  <Link href={a.href} className="block px-4 py-3 active:bg-sobre/10">
                     {conteudo}
                   </Link>
                 ) : (

@@ -8,7 +8,7 @@ import { useFinanceiro } from "@/store/Financeiro";
 import { useSessao } from "@/store/Sessao";
 
 const TIPO = {
-  existente: { texto: "Tela existente", classe: "bg-white/10 text-white/70" },
+  existente: { texto: "Tela existente", classe: "bg-sobre/10 text-rotulo/70" },
   alterada: { texto: "Existente + alteração", classe: "bg-atencao/15 text-atencao" },
   nova: { texto: "Funcionalidade nova", classe: "bg-ok/15 text-ok" },
 } as const;
@@ -19,21 +19,21 @@ export function InfoTelaAtual() {
   if (!info) return null;
   const tipo = TIPO[info.tipo];
   return (
-    <section aria-label="Tela atual" className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-      <p className="text-[12px] uppercase tracking-wider text-white/50">Você está em</p>
+    <section aria-label="Tela atual" className="rounded-2xl border border-sobre/10 bg-sobre/[0.04] p-4">
+      <p className="text-[12px] uppercase tracking-wider text-rotulo/50">Você está em</p>
       <p className="mt-1 text-[17px] font-semibold">
         {info.numero ? `Tela ${info.numero} · ` : ""}
         {info.nome}
       </p>
       <span className={`mt-2 inline-block rounded-full px-2 py-0.5 text-[12px] font-medium ${tipo.classe}`}>{tipo.texto}</span>
       {info.hta && (
-        <p className="mt-3 text-[13px] text-white/70">
-          <span className="font-semibold text-white/90">HTA </span>
+        <p className="mt-3 text-[13px] text-rotulo/70">
+          <span className="font-semibold text-rotulo/90">HTA </span>
           {info.hta}
         </p>
       )}
       {info.classes && (
-        <ul className="mt-2 space-y-0.5 break-all font-mono text-[12px] text-sky-300/90">
+        <ul className="mt-2 space-y-0.5 break-all font-mono text-[12px] text-inatel-texto">
           {info.classes.map((c) => (
             <li key={c}>{c}</li>
           ))}
@@ -66,17 +66,17 @@ export function PainelRoteiro({ aoNavegar }: { aoNavegar?: () => void }) {
   }
 
   return (
-    <section aria-label="Roteiro da tarefa" className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+    <section aria-label="Roteiro da tarefa" className="rounded-2xl border border-sobre/10 bg-sobre/[0.04] p-4">
       <div className="flex items-baseline justify-between">
         <h2 className="text-[17px] font-semibold">Roteiro da tarefa</h2>
-        <span className="text-[13px] tabular-nums text-white/60">
+        <span className="text-[13px] tabular-nums text-rotulo/60">
           {feitosN}/{total}
         </span>
       </div>
-      <p className="mt-1 text-[13px] text-white/60">
+      <p className="mt-1 text-[13px] text-rotulo/60">
         Meta 0 · Planejar o orçamento do mês integrado à bolsa. Os passos marcam sozinhos conforme você usa o app.
       </p>
-      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10" aria-hidden>
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-sobre/10" aria-hidden>
         <div className="h-full rounded-full bg-ok transition-[width] duration-700" style={{ width: `${(feitosN / total) * 100}%` }} />
       </div>
 
@@ -92,16 +92,16 @@ export function PainelRoteiro({ aoNavegar }: { aoNavegar?: () => void }) {
             >
               <span
                 className={`mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold transition-colors ${
-                  feito ? "bg-ok text-black" : atual ? "bg-ativo text-white" : "bg-white/10 text-white/60"
+                  feito ? "bg-ok text-fundo" : atual ? "bg-ativo text-white" : "bg-sobre/10 text-rotulo/60"
                 }`}
               >
                 {feito ? <Check className="size-3.5" strokeWidth={3} aria-label="feito" /> : p.id}
               </span>
               <span className="min-w-0">
-                <span className={`block text-[14px] font-medium ${feito ? "text-white/60 line-through decoration-white/30" : ""}`}>
+                <span className={`block text-[14px] font-medium ${feito ? "text-rotulo/60 line-through decoration-rotulo/30" : ""}`}>
                   {p.titulo}
                 </span>
-                {atual && <span className="mt-0.5 block text-[13px] text-white/70">{p.dica}</span>}
+                {atual && <span className="mt-0.5 block text-[13px] text-rotulo/70">{p.dica}</span>}
               </span>
             </li>
           );
@@ -122,14 +122,14 @@ export function PainelRoteiro({ aoNavegar }: { aoNavegar?: () => void }) {
         <button
           type="button"
           onClick={preencherExemplo}
-          className="flex h-11 items-center justify-center gap-1.5 rounded-lg border border-white/15 text-[14px] active:bg-white/10"
+          className="flex h-11 items-center justify-center gap-1.5 rounded-lg border border-sobre/15 text-[14px] active:bg-sobre/10"
         >
           <Sparkles className="size-4" aria-hidden /> Usar exemplo
         </button>
         <button
           type="button"
           onClick={reiniciarDemo}
-          className="flex h-11 items-center justify-center gap-1.5 rounded-lg border border-white/15 text-[14px] active:bg-white/10"
+          className="flex h-11 items-center justify-center gap-1.5 rounded-lg border border-sobre/15 text-[14px] active:bg-sobre/10"
         >
           <RotateCcw className="size-4" aria-hidden /> Reiniciar demo
         </button>

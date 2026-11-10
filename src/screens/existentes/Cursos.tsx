@@ -21,7 +21,7 @@ export function Cursos() {
                 sessao.setCurso(c.sigla);
                 router.back();
               }}
-              className="flex min-h-[52px] w-full items-center gap-2 px-4 py-2 text-left text-[17px] active:bg-white/10"
+              className="flex min-h-[52px] w-full items-center gap-2 px-4 py-2 text-left text-[17px] active:bg-sobre/10"
             >
               <span className="flex-1">
                 {c.sigla} - {c.nome}

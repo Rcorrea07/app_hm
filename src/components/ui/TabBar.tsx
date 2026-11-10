@@ -29,13 +29,13 @@ export function TabBar() {
   return (
     <nav
       aria-label="Abas do aplicativo"
-      className="shrink-0 border-t border-white/10 bg-barra-abas pb-[env(safe-area-inset-bottom)] desk:hidden"
+      className="shrink-0 border-t border-sobre/10 bg-barra-abas pb-[env(safe-area-inset-bottom)] desk:hidden"
     >
       <ul className="grid grid-cols-5">
         {ABAS.map(({ href, rotulo, Icone, disponivel }) => {
           const ativo = ativa === href;
           const classe = `flex h-[52px] w-full flex-col items-center justify-center gap-0.5 text-[10.5px] font-medium transition-colors ${
-            ativo ? "text-ativo" : "text-rotulo-2 active:text-white"
+            ativo ? "text-ativo" : "text-rotulo-2 active:text-rotulo"
           }`;
           const conteudo = (
             <>

@@ -1,27 +1,35 @@
 @import "tailwindcss";
 
 /*
- * Tokens do App Inatel Acadêmico. Cores amostradas dos pixels das capturas
- * reais (docs/contexto/capturas-app-real). O app é sempre escuro, como o original.
+ * Tokens do App Inatel Acadêmico. Cores amostradas das capturas reais
+ * (docs/contexto/capturas-app-real). Claro ou escuro segue o sistema
+ * (prefers-color-scheme), como o app original; não há botão de tema.
  */
 @theme {
   --color-inatel: #0166c0;
   --color-inatel-press: #0156a3;
-  --color-inatel-texto: #3a8ee6;
-  --color-ativo: #0a84ff;
-  --color-fundo: #000000;
-  --color-superficie: #1c1c1e;
-  --color-superficie-2: #2c2c2e;
-  --color-campo: #323136;
-  --color-barra-abas: #161616;
-  --color-separador: #38383a;
-  --color-borda: #545458;
-  --color-rotulo: #ffffff;
-  --color-rotulo-2: #8e8e93;
-  --color-rotulo-3: #636366;
-  --color-ok: #30d158;
-  --color-atencao: #ffd60a;
-  --color-estouro: #ff453a;
+  --color-inatel-texto: var(--c-inatel-texto);
+  --color-ativo: var(--c-ativo);
+  --color-fundo: var(--c-fundo);
+  --color-superficie: var(--c-superficie);
+  --color-superficie-2: var(--c-superficie-2);
+  --color-campo: var(--c-campo);
+  --color-barra-abas: var(--c-barra-abas);
+  --color-separador: var(--c-separador);
+  --color-borda: var(--c-borda);
+  --color-grade: var(--c-grade);
+  --color-rotulo: var(--c-rotulo);
+  --color-rotulo-2: var(--c-rotulo-2);
+  --color-rotulo-3: var(--c-rotulo-3);
+  /* "sobre": cor de sobreposição (branco no escuro, preto no claro), usada com opacidade */
+  --color-sobre: var(--c-sobre);
+  --color-painel: var(--c-painel);
+  --color-toast: var(--c-toast);
+  --color-segmento: var(--c-segmento);
+  --color-tecla-ativa: var(--c-tecla-ativa);
+  --color-ok: var(--c-ok);
+  --color-atencao: var(--c-atencao);
+  --color-estouro: var(--c-estouro);
 
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-inter), system-ui, sans-serif;
   --font-serif: "Times New Roman", Times, Georgia, serif;
@@ -31,6 +39,58 @@
   --animate-surge: surge 200ms ease-out;
   --animate-desce: desce 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
   --animate-pulso: pulso 1.4s ease-in-out infinite;
+}
+
+:root {
+  color-scheme: light;
+  --c-inatel-texto: #0166c0;
+  --c-ativo: #007aff;
+  --c-fundo: #ffffff;
+  --c-superficie: #f2f2f7;
+  --c-superficie-2: #e5e5ea;
+  --c-campo: #e3e3e8;
+  --c-barra-abas: #f7f7f7;
+  --c-separador: #c6c6c8;
+  --c-borda: #b8b8bd;
+  --c-grade: #9a9aa0;
+  --c-rotulo: #000000;
+  --c-rotulo-2: #8a8a8e;
+  --c-rotulo-3: #aeaeb2;
+  --c-sobre: #000000;
+  --c-painel: #f2f2f7;
+  --c-toast: #ffffff;
+  --c-segmento: #ffffff;
+  --c-tecla-ativa: #d1d1d6;
+  --c-ok: #248a3d;
+  --c-atencao: #b26a00;
+  --c-estouro: #d70015;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --c-inatel-texto: #3a8ee6;
+    --c-ativo: #0a84ff;
+    --c-fundo: #000000;
+    --c-superficie: #1c1c1e;
+    --c-superficie-2: #2c2c2e;
+    --c-campo: #323136;
+    --c-barra-abas: #161616;
+    --c-separador: #38383a;
+    --c-borda: #545458;
+    --c-grade: rgb(255 255 255 / 0.7);
+    --c-rotulo: #ffffff;
+    --c-rotulo-2: #8e8e93;
+    --c-rotulo-3: #636366;
+    --c-sobre: #ffffff;
+    --c-painel: #0e0e10;
+    --c-toast: #2c2c2e;
+    --c-segmento: #636366;
+    --c-tecla-ativa: #48484a;
+    --c-ok: #30d158;
+    --c-atencao: #ffd60a;
+    --c-estouro: #ff453a;
+  }
 }
 
 /*
@@ -92,7 +152,7 @@ html {
 }
 
 body {
-  background: #0b0d12;
+  background: var(--color-fundo);
   color: var(--color-rotulo);
   font-family: var(--font-sans);
 }
@@ -107,7 +167,7 @@ body {
 .rolagem {
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  scrollbar-color: #3a3a3c transparent;
+  scrollbar-color: var(--color-superficie-2) transparent;
 }
 
 .toque:active {
@@ -126,12 +186,12 @@ input[type="range"].slider {
 input[type="range"].slider::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(to right, var(--cor-trilha, var(--color-inatel)) var(--progresso, 50%), #3a3a3c var(--progresso, 50%));
+  background: linear-gradient(to right, var(--cor-trilha, var(--color-inatel)) var(--progresso, 50%), var(--color-superficie-2) var(--progresso, 50%));
 }
 input[type="range"].slider::-moz-range-track {
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(to right, var(--cor-trilha, var(--color-inatel)) var(--progresso, 50%), #3a3a3c var(--progresso, 50%));
+  background: linear-gradient(to right, var(--cor-trilha, var(--color-inatel)) var(--progresso, 50%), var(--color-superficie-2) var(--progresso, 50%));
 }
 input[type="range"].slider::-webkit-slider-thumb {
   -webkit-appearance: none;

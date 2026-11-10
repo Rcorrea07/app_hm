@@ -20,7 +20,7 @@ export function Perfis() {
             sessao.setCurso("GES");
             sessao.setMatricula(LUCAS.matricula);
           }}
-          className="toque mt-7 block w-full rounded-lg border border-separador px-4 py-2.5 text-left active:bg-white/10"
+          className="toque mt-7 block w-full rounded-lg border border-separador px-4 py-2.5 text-left active:bg-sobre/10"
         >
           <span className="block text-[16px]">{LUCAS.nome}</span>
           <span className="block text-[16px] text-rotulo-2">
@@ -30,7 +30,7 @@ export function Perfis() {
         <Link
           href="/app/login"
           onClick={() => sessao.limpar()}
-          className="toque mt-14 flex h-12 w-full items-center justify-center rounded-lg border border-white/30 bg-inatel text-[17px] active:bg-inatel-press"
+          className="toque mt-14 flex h-12 w-full items-center justify-center rounded-lg border border-white/30 bg-inatel text-[17px] text-white active:bg-inatel-press"
         >
           Outro Usuário
         </Link>

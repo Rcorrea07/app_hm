@@ -9,7 +9,7 @@ import { CURSOS, LUCAS } from "@/data/aluno";
 import { useSessao } from "@/store/Sessao";
 
 const campo =
-  "h-12 w-full rounded-lg border border-white/60 bg-transparent px-4 text-center text-[17px] text-white placeholder:text-rotulo-3 focus:border-ativo focus:outline-none";
+  "h-12 w-full rounded-lg border border-borda bg-transparent px-4 text-center text-[17px] text-rotulo placeholder:text-rotulo-3 focus:border-ativo focus:outline-none";
 
 /** Tela 2 · Autenticação (captura 02). Login simulado: Aluno.autenticar(). */
 export function Login() {
@@ -67,7 +67,7 @@ export function Login() {
         <button
           type="submit"
           disabled={entrando}
-          className="toque flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-white/30 bg-inatel text-[17px] active:bg-inatel-press"
+          className="toque flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-white/30 bg-inatel text-[17px] text-white active:bg-inatel-press"
         >
           {entrando && <LoaderCircle className="size-5 animate-spin" aria-hidden />}
           {entrando ? "Autenticando…" : "Autenticar"}

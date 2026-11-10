@@ -68,7 +68,7 @@ export function PainelOrcamento() {
             </p>
             <p className="mt-3 rounded-lg bg-superficie px-3 py-2 text-[13px] text-rotulo-2">
               Renda {formatBRLCurto(orcamento.rendaMensal)} − parcela {formatBRLCurto(orcamento.rendaMensal - orcamento.saldoLivre)} ={" "}
-              <strong className="text-white">saldo livre {formatBRLCurto(orcamento.saldoLivre)}</strong>
+              <strong className="text-rotulo">saldo livre {formatBRLCurto(orcamento.saldoLivre)}</strong>
             </p>
           </div>
 
@@ -119,7 +119,7 @@ export function PainelOrcamento() {
                     type="button"
                     onClick={() => remover(d.id)}
                     aria-label={`Remover gasto de ${formatBRL(d.valor)} em ${nomeCategoria(d.categoriaId)}`}
-                    className="flex size-11 items-center justify-center rounded-full text-rotulo-2 active:bg-white/10 active:text-estouro"
+                    className="flex size-11 items-center justify-center rounded-full text-rotulo-2 active:bg-sobre/10 active:text-estouro"
                   >
                     <Trash2 className="size-4.5" aria-hidden />
                   </button>

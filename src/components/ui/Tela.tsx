@@ -31,7 +31,7 @@ function BotaoVoltar({ acao, comTitulo }: { acao: Acao; comTitulo: boolean }) {
       <span className="truncate">{acao.rotulo}</span>
     </>
   );
-  const classe = `flex h-11 min-w-11 items-center text-[17px] text-white active:opacity-60 desk:h-9 desk:max-w-none desk:rounded-full desk:bg-white/8 desk:pl-2 desk:pr-4 desk:text-[15px] desk:hover:bg-white/15 ${
+  const classe = `flex h-11 min-w-11 items-center text-[17px] text-white active:opacity-60 desk:h-9 desk:max-w-none desk:rounded-full desk:bg-sobre/8 desk:text-rotulo desk:pl-2 desk:pr-4 desk:text-[15px] desk:hover:bg-sobre/15 ${
     comTitulo ? "max-w-[24%]" : "max-w-[70%]"
   }`;
   if (acao.href) {
@@ -55,8 +55,8 @@ export function Tela({ titulo, voltar, direita, topo, children, rodape, classNam
     <section className="flex h-full min-h-0 flex-col">
       {/* Celular: barra azul com título centralizado. Computador: cabeçalho da página. */}
       <header
-        className="relative box-content flex h-11 shrink-0 items-center bg-inatel px-4 pt-[env(safe-area-inset-top)]
-          desk:h-auto desk:gap-4 desk:border-b desk:border-white/10 desk:bg-transparent desk:px-8 desk:py-5"
+        className="relative box-content flex h-11 shrink-0 items-center bg-inatel px-4 text-white desk:text-rotulo pt-[env(safe-area-inset-top)]
+          desk:h-auto desk:gap-4 desk:border-b desk:border-sobre/10 desk:bg-transparent desk:px-8 desk:py-5"
       >
         {voltar && <BotaoVoltar acao={voltar} comTitulo={Boolean(titulo)} />}
         {titulo && (

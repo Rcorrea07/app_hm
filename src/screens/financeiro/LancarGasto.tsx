@@ -78,7 +78,7 @@ export function LancarGasto() {
               key={tremer}
               aria-live="polite"
               className={`mx-auto mt-1 inline-block min-w-[60%] border-b-2 pb-1 text-[40px] font-bold tabular-nums transition-colors ${
-                texto ? "border-ativo text-white" : "border-white/20 text-rotulo-3"
+                texto ? "border-ativo text-rotulo" : "border-sobre/20 text-rotulo-3"
               } ${tremer ? "animate-[tremer_300ms]" : ""}`}
             >
               {mostrado}
@@ -94,7 +94,7 @@ export function LancarGasto() {
                 aria-pressed={categoria === c.id}
                 onClick={() => setCategoria(c.id)}
                 className={`toque flex h-16 flex-col items-center justify-center gap-1 rounded-xl border text-[14px] font-medium transition-colors ${
-                  categoria === c.id ? "border-inatel bg-inatel text-white" : "border-borda active:bg-white/10"
+                  categoria === c.id ? "border-inatel bg-inatel text-white" : "border-borda active:bg-sobre/10"
                 }`}
               >
                 <IconeCategoria id={c.id} className="size-5" />
@@ -108,7 +108,7 @@ export function LancarGasto() {
                 <span className="text-atencao">Passa do teto de {cat.nome} em {formatBRL(excesso)}</span>
               ) : (
                 <span className="text-rotulo-2">
-                  Disponível em {cat.nome}: <strong className="text-white">{formatBRL(Math.max(0, cat.disponivel))}</strong>
+                  Disponível em {cat.nome}: <strong className="text-rotulo">{formatBRL(Math.max(0, cat.disponivel))}</strong>
                 </span>
               )
             ) : (
@@ -138,7 +138,7 @@ export function LancarGasto() {
         <div className="flex flex-col items-center pb-4 text-center">
           <TriangleAlert className="size-9 text-atencao" aria-hidden />
           <p className="mt-2 text-[15px] text-rotulo-2">
-            Este gasto passa o teto de <strong className="text-white">{cat?.nome}</strong> em{" "}
+            Este gasto passa o teto de <strong className="text-rotulo">{cat?.nome}</strong> em{" "}
             <strong className="text-atencao">{formatBRL(excesso)}</strong>. Registrar mesmo assim?
           </p>
         </div>

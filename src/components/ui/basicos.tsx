@@ -38,7 +38,7 @@ export function Linha({ titulo, subtitulo, href, onClick, chevron = true, destaq
       {chevron && <ChevronRight className="size-5 shrink-0 text-rotulo-3" aria-hidden />}
     </span>
   );
-  const classe = `toque flex w-full pl-4 transition-colors active:bg-white/10 ${
+  const classe = `toque flex w-full pl-4 transition-colors active:bg-sobre/10 ${
     destaque ? "bg-inatel/15 ring-1 ring-inset ring-inatel/60" : ""
   }`;
   if (href) {
@@ -76,7 +76,7 @@ export function CampoBusca({ valor, onChange, rotulo = "Buscar" }: { valor: stri
           value={valor}
           onChange={(e) => onChange(e.target.value)}
           placeholder={rotulo}
-          className="h-full w-full bg-transparent text-[17px] text-white placeholder:text-rotulo-2 focus:outline-none"
+          className="h-full w-full bg-transparent text-[17px] text-rotulo placeholder:text-rotulo-2 focus:outline-none"
         />
       </label>
     </div>
@@ -88,7 +88,7 @@ type Variante = "primario" | "secundario" | "perigo" | "texto";
 
 const VARIANTES: Record<Variante, string> = {
   primario: "bg-inatel text-white border border-white/20 active:bg-inatel-press disabled:bg-superficie-2 disabled:text-rotulo-3 disabled:border-transparent",
-  secundario: "bg-transparent text-white border border-borda active:bg-white/10 disabled:text-rotulo-3",
+  secundario: "bg-transparent text-rotulo border border-borda active:bg-sobre/10 disabled:text-rotulo-3",
   perigo: "bg-estouro/15 text-estouro border border-estouro/40 active:bg-estouro/25",
   texto: "bg-transparent text-inatel-texto active:opacity-60",
 };
@@ -164,7 +164,7 @@ export function Chip({
       onClick={onClick}
       style={ativo && cor ? { backgroundColor: cor, borderColor: cor } : undefined}
       className={`toque flex h-11 items-center justify-center gap-1.5 rounded-full border px-4 text-[15px] font-medium transition-colors ${
-        ativo ? "border-inatel bg-inatel text-white" : "border-borda text-white active:bg-white/10"
+        ativo ? "border-inatel bg-inatel text-white" : "border-borda text-rotulo active:bg-sobre/10"
       }`}
     >
       {children}

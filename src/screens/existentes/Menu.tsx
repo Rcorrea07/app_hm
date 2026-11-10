@@ -31,7 +31,7 @@ export function Menu() {
       <SecaoTitulo>Aluno</SecaoTitulo>
       <div className="flex items-center gap-3 border-y border-separador/70 px-4 py-3">
         <span className="flex flex-col items-center">
-          <span className="flex size-14 items-center justify-center rounded-full bg-[#8e8e93] text-[20px] font-semibold text-[#3a3a3c]" aria-hidden>
+          <span className="flex size-14 items-center justify-center rounded-full bg-rotulo-2 text-[20px] font-semibold text-fundo" aria-hidden>
             LA
           </span>
           <button type="button" onClick={indisponivel} className="mt-0.5 text-[15px] text-inatel-texto">
@@ -54,7 +54,7 @@ export function Menu() {
           titulo="Planejador Financeiro & Bolsa"
           subtitulo="Mensalidade líquida e orçamento do mês"
           esquerda={
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-inatel" aria-hidden>
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-inatel text-white" aria-hidden>
               <Wallet className="size-5" />
             </span>
           }

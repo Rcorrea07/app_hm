@@ -46,7 +46,7 @@ export function DetalhesBolsa() {
           />
 
           <div className="px-4 pt-5">
-            <div className="flex h-3 overflow-hidden rounded-full bg-white/10" aria-hidden>
+            <div className="flex h-3 overflow-hidden rounded-full bg-sobre/10" aria-hidden>
               <span
                 className="h-full bg-ok transition-[width] duration-700"
                 style={{ width: `${(bolsa.cotaNaoReembolsavel / bolsa.percentual) * 100}%` }}
@@ -98,7 +98,7 @@ export function DetalhesBolsa() {
               href="https://inatel.br/sae/"
               target="_blank"
               rel="noreferrer"
-              className="toque flex h-12 items-center justify-center gap-2 rounded-lg border border-borda text-[17px] active:bg-white/10"
+              className="toque flex h-12 items-center justify-center gap-2 rounded-lg border border-borda text-[17px] active:bg-sobre/10"
             >
               Abrir página da SAE <ExternalLink className="size-4" aria-hidden />
             </a>
