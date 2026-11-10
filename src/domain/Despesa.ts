@@ -8,6 +8,8 @@ export interface DespesaDados {
   /** Data e hora ISO completas. */
   data: string;
   categoriaId: CategoriaId;
+  /** Só em "Outros gastos": Lazer, Investimento, Viagem… */
+  subcategoria?: string;
 }
 
 let contador = 0;
@@ -22,6 +24,7 @@ export class Despesa {
   readonly valor: Centavos;
   readonly data: string;
   readonly categoriaId: CategoriaId;
+  readonly subcategoria?: string;
 
   constructor(dados: Omit<DespesaDados, "id" | "data"> & Partial<Pick<DespesaDados, "id" | "data">>) {
     if (!Number.isInteger(dados.valor) || dados.valor <= 0) {
@@ -31,6 +34,7 @@ export class Despesa {
     this.valor = dados.valor;
     this.data = dados.data ?? new Date().toISOString();
     this.categoriaId = dados.categoriaId;
+    this.subcategoria = dados.subcategoria;
   }
 
   /** Grava este gasto no armazenamento local do celular (nunca em servidor). */
@@ -39,6 +43,8 @@ export class Despesa {
   }
 
   toDados(): DespesaDados {
-    return { id: this.id, valor: this.valor, data: this.data, categoriaId: this.categoriaId };
+    const dados: DespesaDados = { id: this.id, valor: this.valor, data: this.data, categoriaId: this.categoriaId };
+    if (this.subcategoria) dados.subcategoria = this.subcategoria;
+    return dados;
   }
 }

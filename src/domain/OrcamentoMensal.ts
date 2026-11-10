@@ -1,6 +1,13 @@
 import type { Centavos } from "./money";
 import type { Mensalidade } from "./Mensalidade";
-import { CategoriaGasto, CATEGORIAS, estadoPorComprometimento, type CategoriaId, type FonteDeTeto } from "./CategoriaGasto";
+import {
+  CategoriaGasto,
+  CATEGORIAS,
+  SUBCATEGORIAS_SUGERIDAS,
+  estadoPorComprometimento,
+  type CategoriaId,
+  type FonteDeTeto,
+} from "./CategoriaGasto";
 import { Despesa, type DespesaDados } from "./Despesa";
 import { DIVISAO_SUGERIDA, somaPercentuais } from "./tetos";
 import { armazenamentoLocal } from "./armazenamentoLocal";
@@ -21,6 +28,28 @@ export interface OrcamentoDados {
   fontes: Partial<Record<FonteRenda, Centavos>>;
   percentuais: Record<CategoriaId, number>;
   despesas: DespesaDados[];
+  /** Subcategorias de "Outros gastos" criadas pelo aluno (as sugeridas vêm do código). */
+  subcategorias?: string[];
+}
+
+/** Subcategoria que recebe os gastos da antiga categoria "Estudos / Material". */
+const SUBCATEGORIA_ESTUDOS = SUBCATEGORIAS_SUGERIDAS[0];
+
+/**
+ * Converte dados gravados na versão anterior (3ª categoria "estudos") para
+ * "outros" + subcategoria "Estudos / Material". Dados novos passam sem mudança.
+ */
+export function migrarDados(dados: OrcamentoDados): OrcamentoDados {
+  const antigos = dados as OrcamentoDados & { percentuais: Record<string, number> };
+  const pct: Record<string, number> = { ...antigos.percentuais };
+  if (pct.estudos !== undefined && pct.outros === undefined) {
+    pct.outros = pct.estudos;
+    delete pct.estudos;
+  }
+  const despesas = dados.despesas.map((d) =>
+    (d.categoriaId as string) === "estudos" ? { ...d, categoriaId: "outros" as const, subcategoria: SUBCATEGORIA_ESTUDOS } : d,
+  );
+  return { ...dados, percentuais: pct as Record<CategoriaId, number>, despesas };
 }
 
 /** Classe OrcamentoMensal do diagrama: contém 3 CategoriaGasto e usa a parcela líquida. */
@@ -146,14 +175,23 @@ export class OrcamentoMensal implements FonteDeTeto {
       fontes: { ...this.fontes },
       percentuais,
       despesas: this.despesas.map((d) => d.toDados()),
+      subcategorias: this.categoria("outros").subcategorias.filter((s) => !SUBCATEGORIAS_SUGERIDAS.includes(s)),
     };
   }
 
-  static fromDados(dados: OrcamentoDados, mensalidade: Mensalidade): OrcamentoMensal {
+  static fromDados(salvos: OrcamentoDados, mensalidade: Mensalidade): OrcamentoMensal {
+    const dados = migrarDados(salvos);
     const o = new OrcamentoMensal(dados.mesReferencia, mensalidade, dados.rendaMensal);
+    const outros = o.categoria("outros");
+    for (const s of dados.subcategorias ?? []) {
+      if (!outros.subcategoria(s)) outros.subcategorias.push(s);
+    }
     o.fontes = { ...dados.fontes };
     o.definirTetos(CATEGORIAS.map((c) => dados.percentuais[c.id] ?? 0));
     for (const d of [...dados.despesas].reverse()) {
+      if (d.subcategoria && d.categoriaId === "outros" && !outros.subcategoria(d.subcategoria)) {
+        outros.subcategorias.push(d.subcategoria);
+      }
       o.categoria(d.categoriaId).despesas.push(new Despesa(d));
     }
     return o;

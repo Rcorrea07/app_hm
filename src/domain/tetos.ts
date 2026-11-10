@@ -1,4 +1,4 @@
-/** Divisão sugerida do saldo livre: Moradia 50%, Alimentação 30%, Estudos 20%. */
+/** Divisão sugerida do saldo livre: Moradia 50%, Alimentação 30%, Outros gastos 20%. */
 export const DIVISAO_SUGERIDA: readonly [number, number, number] = [50, 30, 20];
 
 /**

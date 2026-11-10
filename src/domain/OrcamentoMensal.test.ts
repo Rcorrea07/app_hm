@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { OrcamentoMensal } from "./OrcamentoMensal";
+import { OrcamentoMensal, type OrcamentoDados } from "./OrcamentoMensal";
 import { armazenamentoLocal, CHAVE_ORCAMENTO } from "./armazenamentoLocal";
 import { mensalidadeDemo } from "./fixtures";
 
@@ -54,7 +54,7 @@ describe("OrcamentoMensal", () => {
 
   it("remove gasto (desfazer)", () => {
     const o = new OrcamentoMensal("2026-11", mensalidadeDemo(), 290_000);
-    const d = o.categoria("estudos").registrarDespesa(4_990);
+    const d = o.categoria("outros").registrarDespesa(4_990, undefined, "Lazer");
     expect(o.removerDespesa(d.id)?.valor).toBe(4_990);
     expect(o.totalGasto).toBe(0);
   });
@@ -77,5 +77,33 @@ describe("armazenamento local", () => {
     expect(armazenamentoLocal.lerOrcamento()).toBeNull();
     expect(armazenamentoLocal.salvarOrcamento({} as never)).toBe(false);
     expect(CHAVE_ORCAMENTO).toMatch(/inatel/);
+  });
+});
+
+describe("OrcamentoMensal — subcategorias e dados antigos", () => {
+  it("guarda só as subcategorias criadas pelo aluno e as recupera", () => {
+    const m = mensalidadeDemo();
+    const o = new OrcamentoMensal("2026-11", m, 290_000);
+    o.categoria("outros").adicionarSubcategoria("Academia");
+    o.categoria("outros").registrarDespesa(9_000, "2026-11-04T10:00:00.000Z", "Academia");
+    const dados = o.toDados();
+    expect(dados.subcategorias).toEqual(["Academia"]);
+    const copia = OrcamentoMensal.fromDados(JSON.parse(JSON.stringify(dados)), m);
+    expect(copia.categoria("outros").subcategorias).toContain("Academia");
+    expect(copia.categoria("outros").totalPorSubcategoria()).toEqual([{ nome: "Academia", total: 9_000 }]);
+  });
+
+  it("migra a antiga categoria Estudos para Outros → Estudos / Material", () => {
+    const antigo = {
+      mesReferencia: "2026-11",
+      rendaMensal: 290_000,
+      fontes: {},
+      percentuais: { moradia: 50, alimentacao: 30, estudos: 20 },
+      despesas: [{ id: "x1", valor: 6_490, data: "2026-11-09T18:20:00.000Z", categoriaId: "estudos" }],
+    } as unknown as OrcamentoDados;
+    const o = OrcamentoMensal.fromDados(antigo, mensalidadeDemo());
+    expect(o.percentuais).toEqual([50, 30, 20]);
+    expect(o.categoria("outros").totalPorSubcategoria()).toEqual([{ nome: "Estudos / Material", total: 6_490 }]);
+    expect(o.toDados().percentuais).toEqual({ moradia: 50, alimentacao: 30, outros: 20 });
   });
 });
