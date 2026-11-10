@@ -1,26 +1,160 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Tokens do App Inatel Acadêmico. Cores amostradas dos pixels das capturas
+ * reais (docs/contexto/capturas-app-real). O app é sempre escuro, como o original.
+ */
+@theme {
+  --color-inatel: #0166c0;
+  --color-inatel-press: #0156a3;
+  --color-inatel-texto: #3a8ee6;
+  --color-ativo: #0a84ff;
+  --color-fundo: #000000;
+  --color-superficie: #1c1c1e;
+  --color-superficie-2: #2c2c2e;
+  --color-campo: #323136;
+  --color-barra-abas: #161616;
+  --color-separador: #38383a;
+  --color-borda: #545458;
+  --color-rotulo: #ffffff;
+  --color-rotulo-2: #8e8e93;
+  --color-rotulo-3: #636366;
+  --color-ok: #30d158;
+  --color-atencao: #ffd60a;
+  --color-estouro: #ff453a;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-inter), system-ui, sans-serif;
+  --font-serif: "Times New Roman", Times, Georgia, serif;
+
+  --animate-tela: tela-entra 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-sobe: sobe 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-surge: surge 200ms ease-out;
+  --animate-desce: desce 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-pulso: pulso 1.4s ease-in-out infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/*
+ * Variantes responsivas por container (não por viewport): o mesmo app vira
+ * layout de computador quando tem espaço e layout de celular quando não tem.
+ *   desk:    app com ≥ 1024px  (barra superior + menu lateral)
+ *   largo:   app com ≥ 1280px  (painel do roteiro fixo à direita)
+ *   amplo:   área de conteúdo com ≥ 736px (colunas)
+ */
+@custom-variant desk {
+  @container app (width >= 64rem) {
+    @slot;
   }
+}
+@custom-variant largo {
+  @container app (width >= 80rem) {
+    @slot;
+  }
+}
+@custom-variant amplo {
+  @container conteudo (width >= 46rem) {
+    @slot;
+  }
+}
+@keyframes tela-entra {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes sobe {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes desce {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes surge {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pulso {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.9; }
+}
+@keyframes tremer {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+@keyframes toque {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #0b0d12;
+  color: var(--color-rotulo);
+  font-family: var(--font-sans);
+}
+
+/* Foco visível só para teclado. */
+:focus-visible {
+  outline: 2px solid var(--color-ativo);
+  outline-offset: 2px;
+}
+
+/* Rolagem fina dentro do celular. */
+.rolagem {
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #3a3a3c transparent;
+}
+
+.toque:active {
+  animation: toque 180ms ease-out;
+}
+
+/* Slider dos tetos. */
+input[type="range"].slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 44px;
+  background: transparent;
+  width: 100%;
+  cursor: pointer;
+}
+input[type="range"].slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--cor-trilha, var(--color-inatel)) var(--progresso, 50%), #3a3a3c var(--progresso, 50%));
+}
+input[type="range"].slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--cor-trilha, var(--color-inatel)) var(--progresso, 50%), #3a3a3c var(--progresso, 50%));
+}
+input[type="range"].slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -11px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.4);
+}
+input[type="range"].slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
 }
