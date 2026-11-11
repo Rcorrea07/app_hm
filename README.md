@@ -16,7 +16,7 @@ As telas 5–10 (eixo Suporte Financeiro) funcionam de verdade:
 | 10 Lançar Gasto | Teclado numérico, categoria em 1 toque, subcategoria em Outros (Lazer, Investimento, Viagem… ou uma nova), aviso antes de estourar o teto | 3.1 |
 
 Não há backend. Os gastos ficam só no `localStorage` do aparelho, como pede o User Story.
-O layout se adapta: no celular aparecem as abas inferiores, e no computador aparecem uma barra superior, um menu lateral e o roteiro da tarefa.
+O layout se adapta: no celular aparecem as abas inferiores (com a aba nova **Financeiro**), e no computador aparecem uma barra superior e um menu lateral. Em Menu › Protótipo há **Voltar ao começo da demo**, que apaga os dados e volta para a Tela 1.
 
 ## Rodar
 
@@ -33,4 +33,3 @@ npm run e2e        # fluxo completo no navegador (Playwright)
 - `src/store/`: estado das telas e persistência local.
 - `src/screens/`: telas existentes (mock) e telas do Suporte Financeiro.
 - `src/components/`: casca responsiva e componentes no visual do app.
-- `src/tour/`: roteiro da tarefa, que marca os passos da HTA conforme o uso.

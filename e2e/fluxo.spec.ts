@@ -127,14 +127,36 @@ test("larguras de tela sem rolagem horizontal", async ({ page }) => {
   }
 });
 
-test("computador: menu lateral no lugar das abas e roteiro fixo", async ({ page }) => {
+test("computador: menu lateral no lugar das abas", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/app/financeiro");
   const lateral = page.getByRole("navigation", { name: "Navegação principal" });
   await expect(lateral).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Abas do aplicativo" })).toBeHidden();
-  await expect(page.getByRole("complementary", { name: "Roteiro da tarefa" })).toBeVisible();
   await expect(page.getByRole("table", { name: "Resumo da mensalidade" })).toContainText("R$ 1.710,00");
   await lateral.getByRole("link", { name: "Orçamento do mês" }).click();
+  await expect(page.getByText("Seu mês ainda não tem orçamento")).toBeVisible();
+});
+
+test("aba Financeiro e voltar ao começo da demo", async ({ page }) => {
+  await page.goto("/app/avisos");
+  const abas = page.getByRole("navigation", { name: "Abas do aplicativo" });
+  await abas.getByRole("link", { name: "Financeiro" }).click();
+  await expect(page).toHaveURL(/\/app\/financeiro$/);
+  await expect(abas.getByRole("link", { name: "Financeiro" })).toHaveAttribute("aria-current", "page");
+
+  // Planeja o mês com uma renda qualquer.
+  await page.getByRole("link", { name: "Planejar orçamento do mês" }).click();
+  await page.getByLabel("Auxílio familiar").fill("300000");
+  await page.getByRole("button", { name: "Continuar" }).click();
+  await page.getByRole("button", { name: "Salvar orçamento" }).click();
+  await expect(page.getByText("Saldo restante em")).toBeVisible();
+
+  // Menu → Voltar ao começo da demo apaga tudo e volta para Perfis Salvos.
+  await abas.getByRole("link", { name: "Menu" }).click();
+  await page.getByRole("button", { name: /Voltar ao começo da demo/ }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Voltar ao começo" }).click();
+  await expect(page).toHaveURL(/\/app\/perfis$/);
+  await page.goto("/app/financeiro/orcamento");
   await expect(page.getByText("Seu mês ainda não tem orçamento")).toBeVisible();
 });
