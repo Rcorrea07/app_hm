@@ -8,7 +8,6 @@ import { Botao, NotaPrivacidade } from "@/components/ui/basicos";
 import { Passos, ValorAnimado } from "@/components/ui/dados";
 import { useToast, vibrar } from "@/components/ui/Toast";
 import { useFinanceiro } from "@/store/Financeiro";
-import { useRoteiro } from "@/tour/Roteiro";
 import { CATEGORIAS } from "@/domain/CategoriaGasto";
 import { DIVISAO_SUGERIDA, somaPercentuais } from "@/domain/tetos";
 import { formatBRL } from "@/domain/money";
@@ -21,7 +20,6 @@ export function DefinirTetos() {
   const router = useRouter();
   const toast = useToast();
   const fin = useFinanceiro();
-  const { marcar } = useRoteiro();
   const { previa, rascunho } = fin;
   const total = somaPercentuais(rascunho.percentuais);
   const sugerida = rascunho.percentuais.every((p, i) => p === DIVISAO_SUGERIDA[i]);
@@ -33,7 +31,6 @@ export function DefinirTetos() {
 
   function salvar() {
     fin.salvarOrcamento();
-    marcar("2.2");
     vibrar(20);
     toast.mostrar({ texto: "Orçamento do mês salvo neste celular." });
     router.push("/app/financeiro/orcamento");

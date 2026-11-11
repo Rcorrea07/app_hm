@@ -61,7 +61,7 @@ export function Tela({ titulo, voltar, direita, topo, children, rodape, classNam
         {voltar && <BotaoVoltar acao={voltar} comTitulo={Boolean(titulo)} />}
         {titulo && (
           <h1
-            className="pointer-events-none absolute inset-x-0 mx-auto w-[55%] truncate text-center text-[17px] font-semibold
+            className="pointer-events-none absolute inset-x-[92px] truncate text-center text-[17px] font-semibold
               desk:pointer-events-auto desk:static desk:mx-0 desk:w-auto desk:text-left desk:text-[26px] desk:font-bold"
           >
             {titulo}

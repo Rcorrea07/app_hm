@@ -97,16 +97,10 @@
  * Variantes responsivas por container (não por viewport): o mesmo app vira
  * layout de computador quando tem espaço e layout de celular quando não tem.
  *   desk:    app com ≥ 1024px  (barra superior + menu lateral)
- *   largo:   app com ≥ 1280px  (painel do roteiro fixo à direita)
  *   amplo:   área de conteúdo com ≥ 736px (colunas)
  */
 @custom-variant desk {
   @container app (width >= 64rem) {
-    @slot;
-  }
-}
-@custom-variant largo {
-  @container app (width >= 80rem) {
     @slot;
   }
 }

@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/Toast";
 import { AVISO_INDISPONIVEL } from "@/components/ui/TabBar";
 import { LUCAS } from "@/data/aluno";
 import { MENU_ANTES, MENU_DEPOIS, type SecaoMenu } from "@/data/menu";
+import { ItemReiniciarDemo } from "@/components/shell/ReiniciarDemo";
 import { useRouter } from "next/navigation";
 
 /** Tela 4 · Menu (capturas 08–10) + nova seção SUPORTE FINANCEIRO. */
@@ -65,6 +66,9 @@ export function Menu() {
       <Grupo>
         <Linha titulo="Sair" subtitulo="Sair da Aplicação" chevron={false} onClick={() => router.push("/app/perfis")} />
       </Grupo>
+
+      <SecaoTitulo>Protótipo</SecaoTitulo>
+      <ItemReiniciarDemo />
     </Tela>
   );
 }

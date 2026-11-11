@@ -9,7 +9,6 @@ import { TecladoNumerico } from "@/components/ui/entradas";
 import { Folha } from "@/components/ui/Folha";
 import { useToast, vibrar } from "@/components/ui/Toast";
 import { useFinanceiro } from "@/store/Financeiro";
-import { useRoteiro } from "@/tour/Roteiro";
 import { CATEGORIAS, LIMITE_NOME_SUBCATEGORIA, temSubcategorias, type CategoriaId } from "@/domain/CategoriaGasto";
 import { aplicarTecla, textoParaCentavos, type TeclaValor } from "@/domain/teclado";
 import { formatBRL } from "@/domain/money";
@@ -20,7 +19,6 @@ export function LancarGasto() {
   const router = useRouter();
   const toast = useToast();
   const fin = useFinanceiro();
-  const { marcar } = useRoteiro();
   const [texto, setTexto] = useState("");
   const [categoria, setCategoria] = useState<CategoriaId | null>(null);
   const [subcategoria, setSubcategoria] = useState<string | null>(null);
@@ -62,7 +60,6 @@ export function LancarGasto() {
     if (!categoria) return;
     const d = fin.registrarDespesa(categoria, valor, subcategoria ?? undefined);
     if (!d) return;
-    marcar("3.1");
     vibrar(25);
     toast.mostrar({
       texto: `${formatBRL(valor)} em ${rotuloGasto(curto, d.subcategoria)} registrado.`,

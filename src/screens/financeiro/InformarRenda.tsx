@@ -7,7 +7,6 @@ import { Botao, Chip, NotaPrivacidade } from "@/components/ui/basicos";
 import { Passos, ValorAnimado } from "@/components/ui/dados";
 import { CampoDinheiro } from "@/components/ui/entradas";
 import { useFinanceiro } from "@/store/Financeiro";
-import { useRoteiro } from "@/tour/Roteiro";
 import { FONTES_RENDA } from "@/domain/OrcamentoMensal";
 import { formatBRL } from "@/domain/money";
 import { Sincronizando } from "./comum";
@@ -16,7 +15,6 @@ import { Sincronizando } from "./comum";
 export function InformarRenda() {
   const router = useRouter();
   const fin = useFinanceiro();
-  const { marcar } = useRoteiro();
   const { rascunho, previa, mensalidade } = fin;
 
   const saldo = previa?.saldoLivre ?? 0;
@@ -24,7 +22,6 @@ export function InformarRenda() {
   const insuficiente = !semRenda && saldo <= 0;
 
   function continuar() {
-    marcar("2.1");
     router.push("/app/financeiro/planejar/tetos");
   }
 

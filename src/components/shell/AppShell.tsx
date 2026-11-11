@@ -1,48 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import {
-  ListChecks,
-  Mail,
-  ReceiptText,
-  PiggyBank,
-  LogOut,
-} from "lucide-react";
+import { Mail, ReceiptText, PiggyBank, LogOut } from "lucide-react";
 import { ABAS, AVISO_INDISPONIVEL, TabBar } from "@/components/ui/TabBar";
 import { ToastProvider, useToast } from "@/components/ui/Toast";
-import { Folha } from "@/components/ui/Folha";
 import { Selo } from "@/components/ui/basicos";
 import { SessaoProvider } from "@/store/Sessao";
 import { FinanceiroProvider } from "@/store/Financeiro";
-import { RoteiroProvider, useRoteiro, PASSOS } from "@/tour/Roteiro";
 import { LUCAS } from "@/data/aluno";
-import { InfoTelaAtual, PainelRoteiro } from "./PainelRoteiro";
+import { BotaoReiniciarDemo } from "./ReiniciarDemo";
 
 /** Telas sem as abas inferiores / menu lateral (login e modal de lançamento). */
 const SEM_ABAS = ["/app/perfis", "/app/login", "/app/financeiro/lancar"];
 const SEM_MENU_LATERAL = ["/app/perfis", "/app/login"];
 
-/* ---------- Botão do roteiro (quando o painel lateral não cabe) ---------- */
-function BotaoRoteiro({ onClick, className }: { onClick: () => void; className: string }) {
-  const { feitos } = useRoteiro();
-  const n = PASSOS.filter((p) => feitos[p.id]).length;
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={`Abrir roteiro da tarefa, ${n} de ${PASSOS.length} passos feitos`}
-      className={`z-30 flex h-8 items-center gap-1 rounded-full bg-black/25 px-2.5 text-[13px] font-semibold text-white backdrop-blur active:bg-black/40 ${className}`}
-    >
-      <ListChecks className="size-4" aria-hidden />
-      {n}/{PASSOS.length}
-    </button>
-  );
-}
-
 /* ---------- Barra superior do computador ---------- */
-function BarraSuperior({ onRoteiro }: { onRoteiro: () => void }) {
+function BarraSuperior() {
   return (
     <header className="hidden h-14 shrink-0 items-center gap-4 bg-inatel px-5 text-white desk:flex">
       <Link href="/app/avisos" className="flex items-baseline gap-2">
@@ -50,7 +25,7 @@ function BarraSuperior({ onRoteiro }: { onRoteiro: () => void }) {
         <span className="text-[15px] text-white/85">Acadêmico</span>
       </Link>
       <div className="ml-auto flex items-center gap-1">
-        <BotaoRoteiro onClick={onRoteiro} className="largo:hidden" />
+        <BotaoReiniciarDemo />
         <span className="ml-2 flex items-center gap-2 border-l border-white/25 pl-4 text-[14px]">
           <span className="flex size-8 items-center justify-center rounded-full bg-white/20 text-[12px] font-bold" aria-hidden>
             LA
@@ -92,7 +67,7 @@ function MenuLateral() {
 
   return (
     <nav aria-label="Navegação principal" className="hidden w-60 shrink-0 flex-col gap-1 border-r border-sobre/10 bg-painel p-3 desk:flex">
-      {ABAS.map((n) =>
+      {ABAS.filter((n) => !n.href.startsWith("/app/financeiro")).map((n) =>
         n.disponivel ? (
           item(n.href, n.rotulo, n.Icone, !naFin && pathname.startsWith(n.href))
         ) : (
@@ -124,10 +99,8 @@ function MenuLateral() {
 /* ---------- O app em si ---------- */
 function App({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const [roteiroAberto, setRoteiroAberto] = useState(false);
   const comAbas = !SEM_ABAS.some((r) => pathname.startsWith(r));
   const comMenuLateral = !SEM_MENU_LATERAL.some((r) => pathname.startsWith(r));
-  const fechar = () => setRoteiroAberto(false);
 
   return (
     <div
@@ -135,7 +108,7 @@ function App({ children }: { children: ReactNode }) {
       className="@container/app fixed inset-0 flex flex-col overflow-hidden bg-fundo"
     >
       <ToastProvider>
-        <BarraSuperior onRoteiro={() => setRoteiroAberto(true)} />
+        <BarraSuperior />
         <div className="flex min-h-0 flex-1">
           {comMenuLateral && <MenuLateral />}
           <div className="@container/conteudo relative flex min-h-0 min-w-0 flex-1 flex-col">
@@ -144,24 +117,7 @@ function App({ children }: { children: ReactNode }) {
             </div>
             {comAbas && <TabBar />}
           </div>
-          <aside
-            aria-label="Roteiro da tarefa"
-            className="rolagem hidden w-[340px] shrink-0 space-y-4 overflow-y-auto border-l border-sobre/10 bg-painel p-4 largo:block"
-          >
-            <PainelRoteiro />
-            <InfoTelaAtual />
-          </aside>
         </div>
-        <BotaoRoteiro
-          onClick={() => setRoteiroAberto(true)}
-          className="absolute right-2 top-[calc(env(safe-area-inset-top)+6px)] desk:hidden"
-        />
-        <Folha aberta={roteiroAberto} onFechar={fechar} titulo="Protótipo · S05 IHM">
-          <div className="rolagem max-h-[70dvh] space-y-3 overflow-y-auto pb-2">
-            <PainelRoteiro aoNavegar={fechar} />
-            <InfoTelaAtual />
-          </div>
-        </Folha>
       </ToastProvider>
     </div>
   );
@@ -171,9 +127,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <SessaoProvider>
       <FinanceiroProvider>
-        <RoteiroProvider>
-          <App>{children}</App>
-        </RoteiroProvider>
+        <App>{children}</App>
       </FinanceiroProvider>
     </SessaoProvider>
   );

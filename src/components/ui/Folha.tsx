@@ -36,7 +36,7 @@ export function Folha({
         role="dialog"
         aria-modal="true"
         aria-labelledby={id}
-        className="relative w-full animate-sobe rounded-t-2xl bg-superficie px-4 pb-[max(20px,env(safe-area-inset-bottom))] pt-2 shadow-2xl desk:max-w-md desk:rounded-2xl desk:p-6"
+        className="relative w-full animate-sobe rounded-t-2xl bg-superficie text-rotulo px-4 pb-[max(20px,env(safe-area-inset-bottom))] pt-2 shadow-2xl desk:max-w-md desk:rounded-2xl desk:p-6"
       >
         <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-sobre/25 desk:hidden" aria-hidden />
         <h2 id={id} className="mb-2 text-center text-[17px] font-semibold">

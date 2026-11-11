@@ -27,12 +27,6 @@ const RASCUNHO_VAZIO: Rascunho = {
   percentuais: [...DIVISAO_SUGERIDA],
 };
 
-export const EXEMPLO_RENDA: Rascunho = {
-  fontes: { auxilio: 220_000, estagio: 0, bolsaIC: 70_000 },
-  ativas: ["auxilio", "bolsaIC"],
-  percentuais: [...DIVISAO_SUGERIDA],
-};
-
 interface FinanceiroApi {
   hidratado: boolean;
   sincronizacao: Sincronizacao;
@@ -57,7 +51,6 @@ interface FinanceiroApi {
   criarSubcategoria: (nome: string) => { ok: true; nome: string } | { ok: false; erro: string };
   removerDespesa: (id: string) => DespesaDados | null;
   restaurarDespesa: (d: DespesaDados) => void;
-  preencherExemplo: () => void;
   apagarDados: () => void;
 }
 
@@ -237,8 +230,6 @@ export function FinanceiroProvider({ children }: { children: ReactNode }) {
     setVersao((v) => v + 1);
   }, []);
 
-  const preencherExemplo = useCallback(() => setRascunho(EXEMPLO_RENDA), []);
-
   const apagarDados = useCallback(() => {
     armazenamentoLocal.apagarTudo();
     setOrcamentoDados(null);
@@ -266,7 +257,6 @@ export function FinanceiroProvider({ children }: { children: ReactNode }) {
     criarSubcategoria,
     removerDespesa,
     restaurarDespesa,
-    preencherExemplo,
     apagarDados,
   };
 
