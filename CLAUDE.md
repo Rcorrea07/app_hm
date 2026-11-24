@@ -25,10 +25,10 @@ Next.js 16 (App Router, Cache Components ligado) + React 19 + TypeScript + Tailw
 - `src/domain/`: as 7 classes do diagrama (Aluno, SuporteFinanceiro, Mensalidade, Bolsa, OrcamentoMensal, CategoriaGasto, Despesa) + `money`, `datas`, `tetos`, `teclado`, `armazenamentoLocal`. Um `*.test.ts` por módulo.
 - `src/store/`: `Financeiro.tsx` (estado do módulo + persistência), `Sessao.tsx` (login simulado).
 - `src/screens/existentes/` (telas 1–4, mock) e `src/screens/financeiro/` (telas 5–10, funcionais). `src/app/app/**/page.tsx` só importam a tela.
-- `src/components/shell/AppShell.tsx`: casca responsiva. `src/tour/`: roteiro da tarefa (passos da HTA) e anotações de cada tela.
+- `src/components/shell/AppShell.tsx`: casca responsiva. `ReiniciarDemo.tsx`: "Voltar ao começo da demo" (Menu e barra superior).
 
 ## Responsividade (obrigatória no celular E no computador)
-Variantes por container definidas em `globals.css`: `desk:` (app ≥ 1024px: barra superior + menu lateral, sem abas), `largo:` (≥ 1280px: roteiro fixo à direita), `amplo:` (conteúdo ≥ 736px: colunas). Use essas variantes, não `lg:`/`md:` de viewport, dentro do app. Não há modo "ver no celular": a rubrica só pede que o app se adapte.
+Variantes por container definidas em `globals.css`: `desk:` (app ≥ 1024px: barra superior + menu lateral, sem abas), `amplo:` (conteúdo ≥ 736px: colunas). Use essas variantes, não `lg:`/`md:` de viewport, dentro do app. Não há modo "ver no celular": a rubrica só pede que o app se adapte.
 
 ## Contexto de design (fontes em `docs/contexto/`)
 - `capturas-app-real/`: 10 prints do app real (tema escuro, barra azul `#0166C0` amostrada, 5 abas: Avisos, Horários, Notas, Frequência, Menu). Reproduzir o visual; dados do mock devem ser fictícios/da persona.
@@ -52,3 +52,5 @@ desconto = bruto × %; parcelaLiquida = bruto − desconto; Finatel 20–100% (5
 - Sem backend: tudo é estático. Login é só visual (não precisa persistir). Os gastos ficam em `localStorage` por privacidade.
 - `next dev` acessado pelo IP da rede (celular) bloqueia os scripts de dev por padrão (`allowedDevOrigins`); para testar no celular, use o deploy da Vercel.
 - Horários, Notas e Frequência **não** fazem parte do protótipo: as abas aparecem, mas só mostram "Indisponível no protótipo". Só Perfis, Login, Avisos, Menu e o Suporte Financeiro existem.
+- Abas inferiores: Avisos, Horários, Notas, Frequência, **Financeiro** (nova) e Menu.
+- Sem tutorial/roteiro por enquanto (removido em 11/11/2026). Só existe "Voltar ao começo da demo".
